@@ -1,4 +1,94 @@
+.hidden {
+  display: none;
+}
+
 .container {
   width: 722px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.container textarea {
+  width: 700px;
+  height: 200px;
+}
+
+.keyboard-block {
+  width: 700px;
+  margin: 15px auto;
+  padding: 5px;
+  background: #888888;
+  border: 3px solid #222222;
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 5px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.keyboard__key {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background: #444444;
+  border-radius: 3px;
+  color: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.keyboard__key:nth-of-type(14), .keyboard__key:nth-of-type(15), .keyboard__key:nth-of-type(29) {
+  background: black;
+  width: auto;
+  padding: 0 15px;
+}
+
+.keyboard__key:nth-of-type(30), .keyboard__key:nth-of-type(42), .keyboard__key:nth-of-type(55), .keyboard__key:nth-of-type(43) {
+  background: black;
+  width: 85px;
+}
+
+.keyboard__key:nth-of-type(54), .keyboard__key:nth-of-type(56), .keyboard__key:nth-of-type(57), .keyboard__key:nth-of-type(58), .keyboard__key:nth-of-type(60), .keyboard__key:nth-of-type(61), .keyboard__key:nth-of-type(62), .keyboard__key:nth-of-type(63), .keyboard__key:nth-of-type(64), .keyboard__key:nth-of-type(65) {
+  background: black;
+  width: 40px;
+}
+
+.keyboard__key:nth-of-type(59) {
+  width: 330px;
+}
+
+.keyboard__key:hover {
+  cursor: pointer;
+  background: #508650;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.keyboard__key:active {
+  border-radius: 50%;
+  background: #6fcc13;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.active {
+  border-radius: 50%;
+  background: #6fcc13 !important;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
 }
 /*# sourceMappingURL=styles.css.map */
