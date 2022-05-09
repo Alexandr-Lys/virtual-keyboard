@@ -1,0 +1,121 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: url("../virtual-keyboard/texture-g0fe89c208_1920.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.hidden {
+  display: none;
+}
+
+.container {
+  width: 722px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.container .title {
+  color: rgba(161, 212, 102, 0.562);
+}
+
+.container textarea {
+  padding: 10px;
+  font-size: 16px;
+  color: black;
+  width: 700px;
+  height: 200px;
+  background-color: rgba(231, 255, 255, 0.514);
+}
+
+.container textarea:focus {
+  outline: none;
+  border: 3px solid rgba(119, 160, 72, 0.493);
+}
+
+.keyboard-block {
+  width: 700px;
+  margin: 15px auto;
+  padding: 5px;
+  background: rgba(99, 92, 99, 0.685);
+  border: 3px solid #00000034;
+  border-radius: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 5px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.keyboard__key {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background: #d9df818c;
+  border-radius: 3px;
+  color: #180606;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.keyboard__key:nth-of-type(14), .keyboard__key:nth-of-type(15), .keyboard__key:nth-of-type(29) {
+  background: rgba(119, 160, 72, 0.493);
+  width: auto;
+  padding: 0 15px;
+}
+
+.keyboard__key:nth-of-type(30), .keyboard__key:nth-of-type(42), .keyboard__key:nth-of-type(55), .keyboard__key:nth-of-type(43) {
+  background: rgba(119, 160, 72, 0.493);
+  width: 85px;
+}
+
+.keyboard__key:nth-of-type(54), .keyboard__key:nth-of-type(56), .keyboard__key:nth-of-type(57), .keyboard__key:nth-of-type(58), .keyboard__key:nth-of-type(60), .keyboard__key:nth-of-type(61), .keyboard__key:nth-of-type(62), .keyboard__key:nth-of-type(63), .keyboard__key:nth-of-type(64), .keyboard__key:nth-of-type(65) {
+  background: rgba(119, 160, 72, 0.493);
+  width: 40px;
+}
+
+.keyboard__key:nth-of-type(59) {
+  width: 330px;
+}
+
+.keyboard__key:hover {
+  cursor: pointer;
+  background: rgba(198, 133, 204, 0.432);
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.keyboard__key:active {
+  border-radius: 50%;
+  background: rgba(183, 243, 123, 0.575);
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.active {
+  border-radius: 50%;
+  background: rgba(146, 243, 49, 0.575) !important;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.container p {
+  color: rgba(52, 68, 53, 0.801);
+}
+/*# sourceMappingURL=styles.css.map */
