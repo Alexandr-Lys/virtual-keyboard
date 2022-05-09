@@ -359,12 +359,29 @@ class Keyboard {
         key: keyValue,
         code: codeValue
       });
+      e.target.dispatchEvent(eventKeyDown);
+    });
+    keyboardBlock.addEventListener('mouseup', e => {
+      e.preventDefault();
+      let codeValue;
+      let keyValue;
+      if (e.target.childNodes.length > 1) {
+        codeValue = e.target.classList[1];
+        let buttonNode = e.target.childNodes;
+        for (let i = 0; i < buttonNode.length; i += 1) {
+          if (buttonNode[i].classList.length === 1) {
+            keyValue = buttonNode[i].innerHTML;
+          }
+        }
+      } else {
+        codeValue = e.target.parentNode.classList[1];
+        keyValue = e.target.innerHTML;
+      }
       let eventKeyUp = new KeyboardEvent('keyup', {
         bubbles: true,
         key: keyValue,
         code: codeValue
       });
-      e.target.dispatchEvent(eventKeyDown);
       e.target.dispatchEvent(eventKeyUp);
     });
     return this;
