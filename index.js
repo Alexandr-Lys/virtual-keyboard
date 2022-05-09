@@ -364,7 +364,136 @@ class Keyboard {
       e.target.dispatchEvent(eventKeyUp)
     })
   }
+  addClickKeyboardEventListener() {
+    const textarea = document.getElementById('area');
+    let languageFlag = 0;
+    document.addEventListener('keydown', (e) => {
+      let codes = ['ControlLeft', 'AltLeft']
+      let pressed = new Set();
+      if (e.code) {
+        let activeButton = document.querySelector(`.${e.code}`);
+        console.log(e.code + '  rt')
+        activeButton.classList.add('active')
+        e.preventDefault();
+        if (e.key === 'Space') {
+          textarea.value += ' '
+        } else if (e.key === 'Tab') {
+          let elem = '    ';
+          this.addElementToTextarea(textarea, elem);
+        } else if (e.key === 'Shift') {
+          if (document.querySelector('.CapsLock.active')) {
+            let nodeCaseCaps = document.querySelectorAll('.caps')
+            for (let elem of nodeCaseCaps) {
+              elem.classList.add('hidden')
+            }
+            let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps')
+            for (let elem of nodeCaseShiftCaps) {
+              elem.classList.remove('hidden')
+            }
+          } else {
+            let nodeCaseDown = document.querySelectorAll('.case-down')
+            for (let elem of nodeCaseDown) {
+              elem.classList.add('hidden')
+            }
+            let nodeCaseUp = document.querySelectorAll('.case-up')
+            for (let elem of nodeCaseUp) {
+              elem.classList.remove('hidden')
+            }
+          }
+        } else if (e.key === 'CapsLock') {
+          if (!document.querySelector('.ShiftLeft.active')) {
+            if (this.capsLockFlag === 0) {
+              let nodeCaseDown = document.querySelectorAll('.case-down')
+              for (let elem of nodeCaseDown) {
+                elem.classList.add('hidden')
+              }
+              let nodeCaseUp = document.querySelectorAll('.caps')
+              for (let elem of nodeCaseUp) {
+                elem.classList.remove('hidden')
+              }
+              this.capsLockFlag = 1;
+            } else {
+              let nodeCaseDown = document.querySelectorAll('.case-down')
+              for (let elem of nodeCaseDown) {
+                elem.classList.remove('hidden')
+              }
+              let nodeCaseUp = document.querySelectorAll('.caps')
+              for (let elem of nodeCaseUp) {
+                elem.classList.add('hidden')
+              }
+              activeButton.classList.remove('active')
+              this.capsLockFlag = 0;
+            }
+          } else {
+            let nodeCaseCaps = document.querySelectorAll('.case-up')
+            for (let elem of nodeCaseCaps) {
+              elem.classList.add('hidden')
+            }
+            let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps')
+            for (let elem of nodeCaseShiftCaps) {
+              elem.classList.remove('hidden')
+            }
+            this.capsLockFlag = 1
+          }
+        } else if (e.code === 'ControlLeft' || e.code === 'AltLeft') {
+          pressed.add(e.code);
+          for (let code of codes) {
+            if (pressed.has(code)) languageFlag++
+          }
+          if (languageFlag === 2) {
+            languageFlag = 0;
+            pressed.clear();
+            if (localStorage.language === 'eng') {
+              localStorage.language = 'rus';
+            } else {
+              localStorage.language = 'eng';
+            }
+            const keyboardBlock = document.querySelector('.keyboard-block')
+            keyboardBlock.innerHTML = ''
+            this.generateKeyboardButtons(localStorage.language);
+          }
+        } else if (e.key !== 'Meta' && e.code !== 'ControlRight' && e.code !== 'AltRight') {
+          for (let elem of activeButton.childNodes) {
+            if (elem.classList.length === 1) {
+              console.log(elem.textContent)
+              this.addElementToTextarea(textarea, elem.textContent)
+            }
+          }
+        }
 
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      if (e.code) {
+        let activeButton = document.querySelector(`.${e.code}`)
+        if (e.key !== 'CapsLock') {
+          activeButton.classList.remove('active')
+          if (e.key === 'Shift') {
+            if (document.querySelector('.CapsLock.active')) {
+              let nodeCaseCaps = document.querySelectorAll('.caps')
+              for (let elem of nodeCaseCaps) {
+                elem.classList.remove('hidden')
+              }
+              let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps')
+              for (let elem of nodeCaseShiftCaps) {
+                elem.classList.add('hidden')
+              }
+            } else {
+              let nodeCaseDown = document.querySelectorAll('.case-down')
+              for (let elem of nodeCaseDown) {
+                elem.classList.remove('hidden')
+              }
+              let nodeCaseUp = document.querySelectorAll('.case-up')
+              for (let elem of nodeCaseUp) {
+                elem.classList.add('hidden')
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+ 
 }
 let start = new Keyboard();
 start.pageInit();
