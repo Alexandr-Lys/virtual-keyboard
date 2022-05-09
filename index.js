@@ -3,6 +3,8 @@ class Keyboard {
     this.renderFlag = 0;
     this.capsLockFlag = 0;
     this.caretStartPosition = 0;
+    this.activeClickButtonKey = 0;
+    this.activeClickButtonCode = 0;
   }
 
   pageInit() {
@@ -359,30 +361,20 @@ class Keyboard {
         key: keyValue,
         code: codeValue
       });
+      this.activeClickButtonCode = codeValue;
+      this.activeClickButtonKey = keyValue;
       e.target.dispatchEvent(eventKeyDown);
     });
-    keyboardBlock.addEventListener('mouseup', e => {
+    document.addEventListener('mouseup', e => {
       e.preventDefault();
-      let codeValue;
-      let keyValue;
-      if (e.target.childNodes.length > 1) {
-        codeValue = e.target.classList[1];
-        let buttonNode = e.target.childNodes;
-        for (let i = 0; i < buttonNode.length; i += 1) {
-          if (buttonNode[i].classList.length === 1) {
-            keyValue = buttonNode[i].innerHTML;
-          }
-        }
-      } else {
-        codeValue = e.target.parentNode.classList[1];
-        keyValue = e.target.innerHTML;
+      if (this.activeClickButtonCode && this.activeClickButtonKey) {
+        let eventKeyUp = new KeyboardEvent('keyup', {
+          bubbles: true,
+          key: this.activeClickButtonKey,
+          code: this.activeClickButtonCode
+        });
+        e.target.dispatchEvent(eventKeyUp);
       }
-      let eventKeyUp = new KeyboardEvent('keyup', {
-        bubbles: true,
-        key: keyValue,
-        code: codeValue
-      });
-      e.target.dispatchEvent(eventKeyUp);
     });
     return this;
   }
@@ -523,24 +515,52 @@ class Keyboard {
       caretPosition = textarea.selectionStart;
     }
     if (elem === 'Backspace') {
-      if (caretPosition !== 0) {
-        localTextarea.value = textarea.value.slice(0, caretPosition - 1) + '' + textarea.value.slice(caretPosition, textarea.value.length);
+      if (localTextarea.selectionStart === localTextarea.selectionEnd) {
+        if (caretPosition === 0) {
+          localTextarea.value = '' + textarea.value.slice(caretPosition, textarea.value.length);
+        } else {
+          localTextarea.value = textarea.value.slice(0, caretPosition - 1) + '' + textarea.value.slice(caretPosition, textarea.value.length);
+        }
         localTextarea.selectionStart = caretPosition - 1;
         localTextarea.selectionEnd = caretPosition - 1;
+      } else {
+        localTextarea.value = textarea.value.slice(0, localTextarea.selectionStart) + '' + textarea.value.slice(localTextarea.selectionEnd, textarea.value.length);
+        localTextarea.selectionStart = caretPosition;
+        localTextarea.selectionEnd = caretPosition;
       }
     } else if (elem === 'Del') {
-      localTextarea.value = textarea.value.slice(0, caretPosition) + '' + textarea.value.slice(caretPosition + 1, textarea.value.length);
-      localTextarea.selectionStart = caretPosition;
-      localTextarea.selectionEnd = caretPosition;
+      if (localTextarea.selectionStart === localTextarea.selectionEnd) {
+        localTextarea.value = textarea.value.slice(0, caretPosition) + '' + textarea.value.slice(caretPosition + 1, textarea.value.length);
+        localTextarea.selectionStart = caretPosition;
+        localTextarea.selectionEnd = caretPosition;
+      } else {
+        localTextarea.value = textarea.value.slice(0, localTextarea.selectionStart) + '' + textarea.value.slice(localTextarea.selectionEnd, textarea.value.length);
+        localTextarea.selectionStart = caretPosition;
+        localTextarea.selectionEnd = caretPosition;
+      }
     } else if (elem === 'Enter') {
-      localTextarea.value = textarea.value.slice(0, caretPosition) + '\n' + textarea.value.slice(caretPosition, textarea.value.length);
-      localTextarea.selectionStart = caretPosition + 1;
-      localTextarea.selectionEnd = caretPosition + 1;
-    } else {
-      let localTextareaSubstring = textarea.value.slice(caretPosition, textarea.value.length);
-      localTextarea.value = textarea.value.slice(0, caretPosition) + elem + localTextareaSubstring;
-      localTextarea.selectionStart = caretPosition + elem.length;
-      localTextarea.selectionEnd = caretPosition + elem.length;
+      if (localTextarea.selectionStart === localTextarea.selectionEnd) {
+        localTextarea.value = textarea.value.slice(0, caretPosition) + '\n' + textarea.value.slice(caretPosition, textarea.value.length);
+        localTextarea.selectionStart = caretPosition + 1;
+        localTextarea.selectionEnd = caretPosition + 1;
+      } else {
+        localTextarea.value = textarea.value.slice(0, localTextarea.selectionStart) + '\n' + textarea.value.slice(localTextarea.selectionEnd, textarea.value.length);
+        localTextarea.selectionStart = caretPosition + 1;
+        localTextarea.selectionEnd = caretPosition + 1;
+      }
+    } else if (elem) {
+      if (localTextarea.selectionStart === localTextarea.selectionEnd) {
+        let localTextareaSub = textarea.value.slice(caretPosition, textarea.value.length);
+        localTextarea.value = textarea.value.slice(0, caretPosition) + elem + localTextareaSub;
+        localTextarea.selectionStart = caretPosition + elem.length;
+        localTextarea.selectionEnd = caretPosition + elem.length;
+      } else {
+        let localEnd = textarea.value.slice(localTextarea.selectionEnd, textarea.value.length);
+        let localStart = textarea.value.slice(0, localTextarea.selectionStart);
+        localTextarea.value = localStart + elem + localEnd;
+        localTextarea.selectionStart = caretPosition + elem.length;
+        localTextarea.selectionEnd = caretPosition + elem.length;
+      }
     }
   }
 }
