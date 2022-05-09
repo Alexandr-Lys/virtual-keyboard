@@ -493,7 +493,34 @@ class Keyboard {
       }
     })
   }
- 
+  addElementToTextarea(textarea, elem) {
+    let caretPosition;
+    if (this.caretStartPosition) {
+      caretPosition = this.caretStartPosition;
+    } else {
+      caretPosition = textarea.selectionStart;
+    }
+    if (elem === 'Backspace') {
+      if (caretPosition !== 0) {
+        textarea.value = textarea.value.slice(0, caretPosition - 1) + '' + textarea.value.slice(caretPosition, textarea.value.length);
+        textarea.selectionStart = caretPosition - 1;
+        textarea.selectionEnd = caretPosition - 1;
+        console.log(caretPosition)
+      }
+    } else if (elem === 'Del') {
+      textarea.value = textarea.value.slice(0, caretPosition) + '' + textarea.value.slice(caretPosition + 1, textarea.value.length);
+      textarea.selectionStart = caretPosition;
+      textarea.selectionEnd = caretPosition;
+    } else if (elem === 'Enter') {
+      textarea.value = textarea.value.slice(0, caretPosition) + '\n' + textarea.value.slice(caretPosition, textarea.value.length);
+      textarea.selectionStart = caretPosition + 1;
+      textarea.selectionEnd = caretPosition + 1;
+    } else {
+      textarea.value = textarea.value.slice(0, caretPosition) + elem + textarea.value.slice(caretPosition, textarea.value.length);
+      textarea.selectionStart = caretPosition + elem.length;
+      textarea.selectionEnd = caretPosition + elem.length;
+    }
+  }
 }
 let start = new Keyboard();
 start.pageInit();
