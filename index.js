@@ -2,8 +2,9 @@ class Keyboard {
   constructor() {
     this.renderFlag = 0;
     this.capsLockFlag = 0;
-    this.caretStartPosition;
+    this.caretStartPosition = 0;
   }
+
   pageInit() {
     let template = '';
     let page = document.querySelector('body');
@@ -11,13 +12,15 @@ class Keyboard {
     page.innerHTML = template;
     this.keyboardInit();
   }
+
   keyboardInit() {
     this.generateKeyboardButtons('eng');
     this.addClickKeyboardEventListener();
   }
+
   generateKeyboardButtons(language) {
     if (this.renderFlag === 0) {
-      const keyboardBlock = document.querySelector('.keyboard-block')
+      const keyboardBlock = document.querySelector('.keyboard-block');
       let arrButtons;
       let button;
       if (localStorage.language === 'eng') {
@@ -85,8 +88,8 @@ class Keyboard {
           ['ArrowLeft', '◄'],
           ['ArrowDown', '▼'],
           ['ArrowRight', '►'],
-          ['ControlRight', 'Ctrl'],
-        ]
+          ['ControlRight', 'Ctrl']
+        ];
       } else {
         arrButtons = [
           ['Backquote', 'ё', 'Ё'],
@@ -152,31 +155,31 @@ class Keyboard {
           ['ArrowLeft', '◄'],
           ['ArrowDown', '▼'],
           ['ArrowRight', '►'],
-          ['ControlRight', 'Ctrl'],
-        ]
+          ['ControlRight', 'Ctrl']
+        ];
       }
-      for (let i = 0; i < arrButtons.length; i++) {
+      for (let i = 0; i < arrButtons.length; i += 1) {
         let shiftCapsLogic;
         if (arrButtons[i][2]) {
           if (arrButtons[i][1].match(/^[a-zа-яё]{1}$/i)) {
-            shiftCapsLogic = arrButtons[i][1]
+            shiftCapsLogic = arrButtons[i][1];
           } else {
-            shiftCapsLogic = arrButtons[i][2]
+            shiftCapsLogic = arrButtons[i][2];
           }
         } else {
-          shiftCapsLogic = arrButtons[i][1]
+          shiftCapsLogic = arrButtons[i][1];
         }
         button = document.createElement('div');
         button.className = `keyboard__key ${arrButtons[i][0]}`;
         button.innerHTML = `<span class='case-down'>${arrButtons[i][1]}</span><span class='case-up hidden'>${arrButtons[i][2] ? arrButtons[i][2] : arrButtons[i][1]}</span><span class='caps hidden'>${arrButtons[i][1].match(/^[a-zа-яё]{1}$/i) ? arrButtons[i][2] : arrButtons[i][1]}</span><span class='shift-caps hidden'>${shiftCapsLogic}</span>`;
         keyboardBlock.append(button);
 
-        this.renderFlag = 1
+        this.renderFlag = 1;
       }
       this.addButtonsClickHandler();
     } else {
-      const keyboardBlock = document.querySelector('.keyboard-block')
-      keyboardBlock.innerHTML = ''
+      const keyboardBlock = document.querySelector('.keyboard-block');
+      keyboardBlock.innerHTML = '';
       let arrButtons;
       let button;
       if (language === 'eng') {
@@ -244,8 +247,8 @@ class Keyboard {
           ['ArrowLeft', '◄'],
           ['ArrowDown', '▼'],
           ['ArrowRight', '►'],
-          ['ControlRight', 'Ctrl'],
-        ]
+          ['ControlRight', 'Ctrl']
+        ];
       } else {
         arrButtons = [
           ['Backquote', 'ё', 'Ё'],
@@ -311,19 +314,19 @@ class Keyboard {
           ['ArrowLeft', '◄'],
           ['ArrowDown', '▼'],
           ['ArrowRight', '►'],
-          ['ControlRight', 'Ctrl'],
-        ]
+          ['ControlRight', 'Ctrl']
+        ];
       }
-      for (let i = 0; i < arrButtons.length; i++) {
+      for (let i = 0; i < arrButtons.length; i += 1) {
         let shiftCapsLogic;
         if (arrButtons[i][2]) {
           if (arrButtons[i][1].match(/^[a-zа-яё]{1}$/i)) {
-            shiftCapsLogic = arrButtons[i][1]
+            shiftCapsLogic = arrButtons[i][1];
           } else {
-            shiftCapsLogic = arrButtons[i][2]
+            shiftCapsLogic = arrButtons[i][2];
           }
         } else {
-          shiftCapsLogic = arrButtons[i][1]
+          shiftCapsLogic = arrButtons[i][1];
         }
         button = document.createElement('div');
         button.className = `keyboard__key ${arrButtons[i][0]}`;
@@ -332,113 +335,115 @@ class Keyboard {
       }
     }
   }
+
   addButtonsClickHandler() {
-    const keyboardBlock = document.querySelector('.keyboard-block')
+    const keyboardBlock = document.querySelector('.keyboard-block');
     keyboardBlock.addEventListener('mousedown', e => {
       e.preventDefault();
-      let codeValue
-      let keyValue
+      let codeValue;
+      let keyValue;
       if (e.target.childNodes.length > 1) {
-        codeValue = e.target.classList[1]
-        let buttonNode = e.target.childNodes
-        for (let elem of buttonNode) {
-          if (elem.classList.length === 1) {
-            keyValue = elem.innerHTML
+        codeValue = e.target.classList[1];
+        let buttonNode = e.target.childNodes;
+        for (let i = 0; i < buttonNode.length; i += 1) {
+          if (buttonNode[i].classList.length === 1) {
+            keyValue = buttonNode[i].innerHTML;
           }
         }
       } else {
-        codeValue = e.target.parentNode.classList[1]
-        keyValue = e.target.innerHTML
+        codeValue = e.target.parentNode.classList[1];
+        keyValue = e.target.innerHTML;
       }
       let eventKeyDown = new KeyboardEvent('keydown', {
         bubbles: true,
         key: keyValue,
         code: codeValue
-      })
+      });
       let eventKeyUp = new KeyboardEvent('keyup', {
         bubbles: true,
         key: keyValue,
         code: codeValue
-      })
-      e.target.dispatchEvent(eventKeyDown)
-      e.target.dispatchEvent(eventKeyUp)
-    })
+      });
+      e.target.dispatchEvent(eventKeyDown);
+      e.target.dispatchEvent(eventKeyUp);
+    });
+    return this;
   }
+
   addClickKeyboardEventListener() {
     const textarea = document.getElementById('area');
     let languageFlag = 0;
     document.addEventListener('keydown', (e) => {
-      let codes = ['ControlLeft', 'AltLeft']
+      let codes = ['ControlLeft', 'AltLeft'];
       let pressed = new Set();
       if (e.code) {
         let activeButton = document.querySelector(`.${e.code}`);
-        console.log(e.code + '  rt')
-        activeButton.classList.add('active')
+        activeButton.classList.add('active');
         e.preventDefault();
         if (e.key === 'Space') {
-          textarea.value += ' '
+          textarea.value += ' ';
         } else if (e.key === 'Tab') {
           let elem = '    ';
           this.addElementToTextarea(textarea, elem);
         } else if (e.key === 'Shift') {
           if (document.querySelector('.CapsLock.active')) {
-            let nodeCaseCaps = document.querySelectorAll('.caps')
-            for (let elem of nodeCaseCaps) {
-              elem.classList.add('hidden')
+            let nodeCaseCaps = document.querySelectorAll('.caps');
+            for (let i = 0; i < nodeCaseCaps.length; i += 1) {
+              nodeCaseCaps[i].classList.add('hidden');
             }
-            let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps')
-            for (let elem of nodeCaseShiftCaps) {
-              elem.classList.remove('hidden')
+            let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps');
+            for (let i = 0; i < nodeCaseShiftCaps.length; i += 1) {
+              nodeCaseShiftCaps[i].classList.remove('hidden');
             }
           } else {
-            let nodeCaseDown = document.querySelectorAll('.case-down')
-            for (let elem of nodeCaseDown) {
-              elem.classList.add('hidden')
+            let nodeCaseDown = document.querySelectorAll('.case-down');
+            for (let i = 0; i < nodeCaseDown.length; i += 1) {
+              nodeCaseDown[i].classList.add('hidden');
             }
-            let nodeCaseUp = document.querySelectorAll('.case-up')
-            for (let elem of nodeCaseUp) {
-              elem.classList.remove('hidden')
+            let nodeCaseUp = document.querySelectorAll('.case-up');
+            for (let i = 0; i < nodeCaseUp.length; i += 1) {
+              nodeCaseUp[i].classList.remove('hidden');
             }
           }
         } else if (e.key === 'CapsLock') {
           if (!document.querySelector('.ShiftLeft.active')) {
             if (this.capsLockFlag === 0) {
-              let nodeCaseDown = document.querySelectorAll('.case-down')
-              for (let elem of nodeCaseDown) {
-                elem.classList.add('hidden')
+              let nodeCaseDown = document.querySelectorAll('.case-down');
+              for (let i = 0; i < nodeCaseDown.length; i += 1) {
+                nodeCaseDown[i].classList.add('hidden');
               }
-              let nodeCaseUp = document.querySelectorAll('.caps')
-              for (let elem of nodeCaseUp) {
-                elem.classList.remove('hidden')
+              let nodeCaseUp = document.querySelectorAll('.caps');
+              for (let i = 0; i < nodeCaseUp.length; i += 1) {
+                nodeCaseUp[i].classList.remove('hidden');
               }
               this.capsLockFlag = 1;
             } else {
-              let nodeCaseDown = document.querySelectorAll('.case-down')
-              for (let elem of nodeCaseDown) {
-                elem.classList.remove('hidden')
+              let nodeCaseDown = document.querySelectorAll('.case-down');
+              for (let i = 0; i < nodeCaseDown.length; i += 1) {
+                nodeCaseDown[i].classList.remove('hidden');
               }
-              let nodeCaseUp = document.querySelectorAll('.caps')
-              for (let elem of nodeCaseUp) {
-                elem.classList.add('hidden')
+              let nodeCaseUp = document.querySelectorAll('.caps');
+              for (let i = 0; i < nodeCaseUp.length; i += 1) {
+                nodeCaseUp[i].classList.add('hidden');
               }
-              activeButton.classList.remove('active')
+              activeButton.classList.remove('active');
               this.capsLockFlag = 0;
             }
           } else {
-            let nodeCaseCaps = document.querySelectorAll('.case-up')
-            for (let elem of nodeCaseCaps) {
-              elem.classList.add('hidden')
+            let nodeCaseCaps = document.querySelectorAll('.case-up');
+            for (let i = 0; i < nodeCaseCaps.length; i += 1) {
+              nodeCaseCaps[i].classList.add('hidden');
             }
-            let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps')
-            for (let elem of nodeCaseShiftCaps) {
-              elem.classList.remove('hidden')
+            let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps');
+            for (let i = 0; i < nodeCaseShiftCaps.length; i += 1) {
+              nodeCaseShiftCaps[i].classList.remove('hidden');
             }
-            this.capsLockFlag = 1
+            this.capsLockFlag = 1;
           }
         } else if (e.code === 'ControlLeft' || e.code === 'AltLeft') {
           pressed.add(e.code);
-          for (let code of codes) {
-            if (pressed.has(code)) languageFlag++
+          for (let i = 0; i < codes.length; i += 1) {
+            if (pressed.has(codes[i])) languageFlag += 1;
           }
           if (languageFlag === 2) {
             languageFlag = 0;
@@ -448,53 +453,53 @@ class Keyboard {
             } else {
               localStorage.language = 'eng';
             }
-            const keyboardBlock = document.querySelector('.keyboard-block')
-            keyboardBlock.innerHTML = ''
+            const keyboardBlock = document.querySelector('.keyboard-block');
+            keyboardBlock.innerHTML = '';
             this.generateKeyboardButtons(localStorage.language);
           }
         } else if (e.key !== 'Meta' && e.code !== 'ControlRight' && e.code !== 'AltRight') {
-          for (let elem of activeButton.childNodes) {
-            if (elem.classList.length === 1) {
-              console.log(elem.textContent)
-              this.addElementToTextarea(textarea, elem.textContent)
+          for (let i = 0; i < activeButton.childNodes.length; i += 1) {
+            if (activeButton.childNodes[i].classList.length === 1) {
+              this.addElementToTextarea(textarea, activeButton.childNodes[i].textContent);
             }
           }
         }
-
       }
     });
     document.addEventListener('keyup', (e) => {
       if (e.code) {
-        let activeButton = document.querySelector(`.${e.code}`)
+        let activeButton = document.querySelector(`.${e.code}`);
         if (e.key !== 'CapsLock') {
-          activeButton.classList.remove('active')
+          activeButton.classList.remove('active');
           if (e.key === 'Shift') {
             if (document.querySelector('.CapsLock.active')) {
-              let nodeCaseCaps = document.querySelectorAll('.caps')
-              for (let elem of nodeCaseCaps) {
-                elem.classList.remove('hidden')
+              let nodeCaseCaps = document.querySelectorAll('.caps');
+              for (let i = 0; i < nodeCaseCaps.length; i += 1) {
+                nodeCaseCaps[i].classList.remove('hidden');
               }
-              let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps')
-              for (let elem of nodeCaseShiftCaps) {
-                elem.classList.add('hidden')
+              let nodeCaseShiftCaps = document.querySelectorAll('.shift-caps');
+              for (let i = 0; i < nodeCaseShiftCaps.length; i += 1) {
+                nodeCaseShiftCaps[i].classList.add('hidden');
               }
             } else {
-              let nodeCaseDown = document.querySelectorAll('.case-down')
-              for (let elem of nodeCaseDown) {
-                elem.classList.remove('hidden')
+              let nodeCaseDown = document.querySelectorAll('.case-down');
+              for (let i = 0; i < nodeCaseDown.length; i += 1) {
+                nodeCaseDown[i].classList.remove('hidden');
               }
-              let nodeCaseUp = document.querySelectorAll('.case-up')
-              for (let elem of nodeCaseUp) {
-                elem.classList.add('hidden')
+              let nodeCaseUp = document.querySelectorAll('.case-up');
+              for (let i = 0; i < nodeCaseUp.length; i += 1) {
+                nodeCaseUp[i].classList.add('hidden');
               }
             }
           }
         }
       }
-    })
+    });
   }
+
   addElementToTextarea(textarea, elem) {
     let caretPosition;
+    let localTextarea = textarea;
     if (this.caretStartPosition) {
       caretPosition = this.caretStartPosition;
     } else {
@@ -502,23 +507,23 @@ class Keyboard {
     }
     if (elem === 'Backspace') {
       if (caretPosition !== 0) {
-        textarea.value = textarea.value.slice(0, caretPosition - 1) + '' + textarea.value.slice(caretPosition, textarea.value.length);
-        textarea.selectionStart = caretPosition - 1;
-        textarea.selectionEnd = caretPosition - 1;
-        console.log(caretPosition)
+        localTextarea.value = textarea.value.slice(0, caretPosition - 1) + '' + textarea.value.slice(caretPosition, textarea.value.length);
+        localTextarea.selectionStart = caretPosition - 1;
+        localTextarea.selectionEnd = caretPosition - 1;
       }
     } else if (elem === 'Del') {
-      textarea.value = textarea.value.slice(0, caretPosition) + '' + textarea.value.slice(caretPosition + 1, textarea.value.length);
-      textarea.selectionStart = caretPosition;
-      textarea.selectionEnd = caretPosition;
+      localTextarea.value = textarea.value.slice(0, caretPosition) + '' + textarea.value.slice(caretPosition + 1, textarea.value.length);
+      localTextarea.selectionStart = caretPosition;
+      localTextarea.selectionEnd = caretPosition;
     } else if (elem === 'Enter') {
-      textarea.value = textarea.value.slice(0, caretPosition) + '\n' + textarea.value.slice(caretPosition, textarea.value.length);
-      textarea.selectionStart = caretPosition + 1;
-      textarea.selectionEnd = caretPosition + 1;
+      localTextarea.value = textarea.value.slice(0, caretPosition) + '\n' + textarea.value.slice(caretPosition, textarea.value.length);
+      localTextarea.selectionStart = caretPosition + 1;
+      localTextarea.selectionEnd = caretPosition + 1;
     } else {
-      textarea.value = textarea.value.slice(0, caretPosition) + elem + textarea.value.slice(caretPosition, textarea.value.length);
-      textarea.selectionStart = caretPosition + elem.length;
-      textarea.selectionEnd = caretPosition + elem.length;
+      let localTextareaSubstring = textarea.value.slice(caretPosition, textarea.value.length);
+      localTextarea.value = textarea.value.slice(0, caretPosition) + elem + localTextareaSubstring;
+      localTextarea.selectionStart = caretPosition + elem.length;
+      localTextarea.selectionEnd = caretPosition + elem.length;
     }
   }
 }
