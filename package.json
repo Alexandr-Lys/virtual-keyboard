@@ -1,0 +1,25 @@
+{
+  "name": "virtual-keyboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx eslint index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alexandr-Lys/virtual-keyboard.git"
+  },
+  "author": "Alexandr Lysenko <a.lysenko00@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alexandr-Lys/virtual-keyboard/issues"
+  },
+  "homepage": "https://github.com/Alexandr-Lys/virtual-keyboard#readme",
+  "dependencies": {
+    "eslint-config-airbnb-base": "^15.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0"
+  }
+}
